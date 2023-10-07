@@ -7,7 +7,7 @@ CORS(app) # Way of solving Access-Control-Allow-Origin problem
 
 @app.route("/get-currencies")
 def get_all_currencies():
-    connection = sqlite3.connect('currencies.db')
+    connection = sqlite3.connect('./currencies.db')
     cursor = connection.cursor()
 
     # Not recommended if using large databases, but fine for this instance
@@ -20,7 +20,7 @@ def get_all_currencies():
 
 @app.route("/vote/<currency_name>", methods=["PUT"])
 def increase_vote(currency_name):
-    connection = sqlite3.connect('currencies.db')
+    connection = sqlite3.connect('./currencies.db')
     cursor = connection.cursor()
 
     # Increases currency vote by 1
@@ -40,7 +40,7 @@ def increase_vote(currency_name):
 
 @app.route("/clear-votes", methods=["POST"])
 def clear_votes():
-    connection = sqlite3.connect('currencies.db')
+    connection = sqlite3.connect('./currencies.db')
     cursor = connection.cursor()
 
     query = f'''UPDATE currencies
@@ -48,7 +48,7 @@ def clear_votes():
     cursor.execute(query)
     connection.commit()
 
-    return # Not sure
+    return "Cleared all votes"
 
-if __name__ == "__main__":
-    app.run(debug=True)
+#if __name__ == "__main__":
+#    app.run(debug=True)
