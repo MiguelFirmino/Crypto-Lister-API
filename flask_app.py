@@ -16,7 +16,7 @@ def get_all_currencies():
     cursor = connection.cursor()
 
     # Not recommended if using large databases, but fine for this instance
-    query = '''SELECT name, votes, icon_link
+    query = '''SELECT name, votes, icon_link, aka
                FROM currencies
                ORDER BY votes DESC'''
     result = cursor.execute(query).fetchall()
@@ -36,7 +36,7 @@ def increase_vote(currency_name):
     connection.commit() # Saves changes
 
     # Gets updated currency values
-    query = f'''SELECT name, votes, icon_link
+    query = f'''SELECT name, votes, icon_link, aka
                 FROM currencies
                 WHERE name = "{currency_name}"'''
     result = cursor.execute(query).fetchall()[0] # Gets first occurance item from query
