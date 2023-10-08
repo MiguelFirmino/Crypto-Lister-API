@@ -9,11 +9,11 @@ This public API is hosted at: https://miguelartioli.pythonanywhere.com/
 
 It has a few endpoints:
 
-- /get-currencies/ (GET), which returns data for all currencies.
-  
-- /vote/<currency_name> (PUT), which increments votes for given currency by 1 and returns data for the updated currency.
+🚩 /get-currencies/ (GET), which returns data for all currencies.
 
-- /clear-votes (POST), which resets votes at 0 for all currencies.
+🚩 /vote/<currency_name> (PUT), which increments votes for given currency by 1 and returns data for the updated currency.
+
+🚩 /clear-votes (POST), which resets votes at 0 for all currencies.
 
 ## Concepts Applied🏴
 
