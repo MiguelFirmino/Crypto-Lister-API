@@ -6,27 +6,43 @@ import sqlite3
 app = Flask(__name__)
 CORS(app) # Way of solving Access-Control-Allow-Origin problem
 
+# Default function for connecting to database
+def database_connection():
+    connection = None
+
+    try:
+        connection = sqlite3.connect('currencies.db')
+    except sqlite3.error as error:
+        return error
+
+    return connection
+
+# Test route
 @app.route("/")
 def home():
-    # Test route
     return "Hello, you're at home!"
 
-@app.route("/get-currencies")
+@app.route("/get-currencies", methods=["GET"])
 def get_all_currencies():
-    connection = sqlite3.connect('currencies.db')
+    connection = database_connection()
     cursor = connection.cursor()
 
     # Not recommended if using large databases, but fine for this instance
-    query = '''SELECT name, votes, icon_link, aka
+    query = '''SELECT *
                FROM currencies
                ORDER BY votes DESC'''
     result = cursor.execute(query).fetchall()
 
-    return jsonify(data= result)
+    # generates easily readable object for each row of query
+    currencies = [
+        dict(name=row[0], votes=row[1], iconLink=row[2], aka=row[3]) for row in result
+    ]
 
-@app.route("/vote/<currency_name>", methods=["PUT"])
+    return jsonify(data=currencies)
+
+@app.route("/vote/<currency_name>", methods=["PUT", "GET"])
 def increase_vote(currency_name):
-    connection = sqlite3.connect('currencies.db')
+    connection = database_connection()
     cursor = connection.cursor()
 
     # Increases currency vote by 1
@@ -42,11 +58,13 @@ def increase_vote(currency_name):
                 WHERE name = "{currency_name}"'''
     result = cursor.execute(query).fetchall()[0] # Gets first occurance item from query
 
-    return jsonify(data= result)
+    currency = [ dict(name=result[0], votes=result[1], iconLink=result[2], aka=result[3]) ]
+
+    return jsonify(data=currency)
 
 @app.route("/remove-vote/<currency_name>", methods=["PUT"])
 def decrease_vote(currency_name):
-    connection = sqlite3.connect('currencies.db')
+    connection = database_connection()
     cursor = connection.cursor()
 
     # Decreases currency vote by 1 if votes > 0
@@ -64,12 +82,14 @@ def decrease_vote(currency_name):
                 FROM currencies
                 WHERE name = "{currency_name}"'''
     result = cursor.execute(query).fetchall()[0] # Gets first occurance item from query
-    
-    return jsonify(data= result)
+
+    currency = [ dict(name=result[0], votes=result[1], iconLink=result[2], aka=result[3]) ]
+
+    return jsonify(data=currency)
 
 @app.route("/clear-votes", methods=["POST"])
 def clear_votes():
-    connection = sqlite3.connect('currencies.db')
+    connection = database_connection()
     cursor = connection.cursor()
 
     query = '''UPDATE currencies
