@@ -62,7 +62,7 @@ def decrease_vote(currency_name):
                 WHERE name = "{currency_name}"'''
     result = cursor.execute(query).fetchall()[0] # Gets first occurance item from query
     
-
+    return jsonify(data= result)
 
 @app.route("/clear-votes", methods=["POST"])
 def clear_votes():
