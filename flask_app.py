@@ -52,7 +52,10 @@ def decrease_vote(currency_name):
     # Decreases currency vote by 1 if votes > 0
     query = f'''UPDATE currencies
             SET votes = votes - 1
-            WHERE name = "{currency_name}" AND votes > 0'''
+            WHERE name = "{currency_name}" 
+            AND votes > 0'''
+    cursor.execute(query)
+    connection.commit() # Saves changes
 
     # Gets updated currency values
     # note: i've decided not to put this into a function so 
