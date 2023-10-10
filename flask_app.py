@@ -40,7 +40,7 @@ def get_all_currencies():
 
     return jsonify(data=currencies)
 
-@app.route("/vote/<currency_name>", methods=["PUT", "GET"])
+@app.route("/vote/<currency_name>", methods=["PUT"])
 def increase_vote(currency_name):
     connection = database_connection()
     cursor = connection.cursor()
